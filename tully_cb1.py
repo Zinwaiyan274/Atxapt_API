@@ -1,10 +1,11 @@
+from flask import Flask, render_template, request, jsonify
 import openai
 import os
 import re
 
 
 # Replace with your OpenAI API key
-openai.api_key = "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"
+openai.api_key = "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"
 
 PROMPT_START = '''You are an engaging and helpful chatbot that guides users to find the right home in Austin, Texas. If they are interested, you direct them to contact real estate agent Daniel Tully at 512-767-2761. Ask the following questions to gather information:
 - What type of home are you looking for?
@@ -12,6 +13,8 @@ PROMPT_START = '''You are an engaging and helpful chatbot that guides users to f
 - What is your budget?
 - Are you looking for a specific neighborhood?
 - What are some must-have features in your new home?'''
+
+app = Flask(__name__)
 
 def generate_response(prompt):
     #return "affirmative"
@@ -26,6 +29,16 @@ def generate_response(prompt):
     )
     return response.choices[0].text.strip()
 
+@app.route("/")
+def index():
+    return render_template("index.html")
+
+@app.route("/get_chat_response", methods=["POST"])
+def get_chat_response():
+    user_input = request.form.get("user_input")
+    prompt = f"Real-estate chatbot: {user_input}"
+    chatbot_response = generate_response(prompt)
+    return jsonify({"response": chatbot_response})
 
 
 def get_yes_no_response(question):
@@ -174,5 +187,8 @@ def main():
                     print("Chatbot: No problem! If you change your mind or have more questions, feel free to ask.")
                     continue
 
+# if __name__ == "__main__":
+#     main()
+
 if __name__ == "__main__":
-    main()
+    app.run(debug=True)

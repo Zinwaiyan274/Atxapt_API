@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real-Estate ChatGPT</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $("#chat-form").submit(function(e) {
+                e.preventDefault();
+                let user_input = $("#user-input").val();
+                $.ajax({
+                    url: "/get_chat_response",
+                    type: "POST",
+                    data: {
+                        user_input: user_input
+                    },
+                    success: function(data) {
+                        let chat_output = $("<p>").text("Chatbot: " + data.response);
+                        $("#chat-area").append(chat_output);
+                    }
+                });
+                let chat_input = $("<p>").text("You: " + user_input);
+                $("#chat-area").append(chat_input);
+                $("#user-input").val("");
+            });
+        });
+    </script>
+</head>
+<body>
+    <h1>Real-Estate ChatGPT</h1>
+    <div id="chat-area" style="width: 500px; height: 300px; border: 1px solid black; overflow-y: scroll; padding: 10px;"></div>
+    <form id="chat-form">
+        <input type="text" id="user-input" placeholder="Type your message..." style="width: 400px;">
+        <input type="submit" value="Send">
+    </form>
+</body>
+</html>
