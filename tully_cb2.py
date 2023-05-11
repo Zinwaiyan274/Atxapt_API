@@ -25,7 +25,7 @@ class RealEstateChatbot:
         self.df1 = self.df.iloc[:,:58]
         self.df1 = self.df1.fillna(0)
         self.df_new = self.df1.iloc[:,1:]
-        openai.api_key = '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'
+        openai.api_key='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'
 
     def start_chat(self):
         response = openai.Completion.create(engine="text-davinci-003", prompt="As a person talking natrually asking to help find a home ask about what they are looking for in less than 10 words", max_tokens=60)
